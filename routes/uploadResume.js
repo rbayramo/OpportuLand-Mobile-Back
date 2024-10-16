@@ -62,14 +62,14 @@ async function makePostRequest(text) {
     }
     return "";
   });
-
+  //       "gpt-3.5-turbo-0125",
   const data = {
-    model: "gpt-3.5-turbo-0125",
+    model: "gpt-4o-2024-05-13",
     messages: [
       {
         role: "user",
         content:
-          'Read the following text and return data in the following format, {fullname: fullname in text, skills: array made from skills mentioned in text, languages: array made from languages mentioned in text, experience: [{company: [company name in text], period: [from what time until what time], achievements: what was achieved in that particular job}], email: email in text, linkedIn: linkedIn in text, phone: phone number in text, coverLetter: create a detailed and appealing cover letter from text using variables: [Job Applying], [Company Applying] for the cover letter only use the these two variables enclosing with square brackets:.Start the cover letter with "Dear Hiring Manager,". The first line of the cover letter should be only "Dear Hiring Manager,".' +
+          'Read the following text and return data in the following format, {fullname: fullname in text, skills: array made from skills mentioned in text, languages: array made from languages mentioned in text, experience: [{company: [company name in text], period: [from what time until what time], achievements: what was achieved in that particular job}], email: email in text, linkedIn: linkedIn in text, phone: phone number in text, coverLetter: create a detailed and appealing cover letter from text using variables: [Job Applying], [Company Applying] for the cover letter only use the these two variables enclosing with square brackets:.Start the cover letter with "Dear Hiring Manager,". Write the cover letter in paragraphs. The first line of the cover letter should be only "Dear Hiring Manager,".' +
           text,
       },
     ],
@@ -77,7 +77,6 @@ async function makePostRequest(text) {
   };
 
   try {
-    console.log("apiKey: ", apiKey);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -86,7 +85,7 @@ async function makePostRequest(text) {
       },
       body: JSON.stringify(data),
     });
-    console.log("response: ", response);
+
     if (response.ok) {
       const responseData = await response.json();
       return responseData.choices[0].message.content;
