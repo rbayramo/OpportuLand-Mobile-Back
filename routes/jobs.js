@@ -25,7 +25,11 @@ const verifyToken = async (req, res, next) => {
 //all jobs
 router.get("/all", async (req, res) => {
   try {
-    const jobs = await Jobs.find().limit(10);
+    const jobs = await Jobs.find()
+      .sort({
+        date_created: -1,
+      })
+      .limit(10);
     res.json(jobs);
   } catch (error) {
     console.error(error);
@@ -64,10 +68,17 @@ router.get("/filter", verifyToken, async (req, res) => {
         remote_status: "local",
       };
       totalJobs = await Jobs.countDocuments(jobLocation);
-      jobs = await Jobs.find(jobLocation);
+      jobs = await Jobs.find(jobLocation).sort({
+        date_created: -1,
+      });
 
       if (jobs?.length > 10) {
-        jobs = await Jobs.find(jobLocation).skip(skip).limit(10);
+        jobs = await Jobs.find(jobLocation)
+          .sort({
+            date_created: -1,
+          })
+          .skip(skip)
+          .limit(10);
       }
 
       jobs?.map((a) => console.log("location jobs", a.job_name, a.location)); //isleyir
@@ -88,9 +99,15 @@ router.get("/filter", verifyToken, async (req, res) => {
         };
 
         const jobNameResults = await Jobs.find(jobNameQuery)
+          .sort({
+            date_created: -1,
+          })
           .skip(skip)
           .limit(10);
         const jobDescriptionResults = await Jobs.find(jobDescriptionQuery)
+          .sort({
+            date_created: -1,
+          })
           .skip(skip)
           .limit(10);
 
@@ -126,11 +143,19 @@ router.get("/filter", verifyToken, async (req, res) => {
         remote_status: "remote",
       };
 
-      const jobNameResults = await Jobs.find(jobNameQuery).skip(skip).limit(10);
+      const jobNameResults = await Jobs.find(jobNameQuery)
+        .sort({
+          date_created: -1,
+        })
+        .skip(skip)
+        .limit(10);
       jobNameResults?.map((job) =>
         console.log("name", console.log(job.job_name, job.location))
       );
       const jobDescriptionResults = await Jobs.find(jobDescriptionQuery)
+        .sort({
+          date_created: -1,
+        })
         .skip(skip)
         .limit(10);
 
@@ -157,7 +182,12 @@ router.get("/filter", verifyToken, async (req, res) => {
       //console.log(extendedQuery)
 
       totalJobs = await Jobs.countDocuments(defaultJobs);
-      jobs = await Jobs.find(defaultJobs).skip(skip).limit(10);
+      jobs = await Jobs.find(defaultJobs)
+        .sort({
+          date_created: -1,
+        })
+        .skip(skip)
+        .limit(10);
       // console.log(defaultJobs)
       //jobs?.map((a) => console.log(a?.name))
     }

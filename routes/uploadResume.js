@@ -19,8 +19,9 @@ router.post("/convertPdfToText", convert.single("file"), async (req, res) => {
   console.log(req.file);
   try {
     const text = await pdfToText(req.file.buffer);
-    console.log("final text", text);
-    res.status(200).send({ text });
+    const cleanedText = text.replace(/```json|```/g, ""); // Remove unwanted ```json and ``` markers
+    console.log("final text", cleanedText);
+    res.status(200).send({ text: cleanedText });
   } catch (error) {
     console.error("Error processing PDF:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
